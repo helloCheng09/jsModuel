@@ -1,0 +1,129 @@
+<form action="#">
+    <label for="user">账号：</label>
+    <input type="text" name="user" id="user">
+    <span id="showUser"></span>
+    <label for="psw">密码：</label>
+    <input type="text" name="psw" id="psw">
+    <span id="showPsw"></span>
+    <input type="button" class="submit" id="submit" value="提交">
+</form>
+<style>
+    span {
+        font-size: 14px;
+        color: red;
+    }
+
+</style>
+<script>
+    // 提交表单
+    document.getElementById("submit").addEventListener("click",function () {
+        ProxyRequest()
+    })
+
+    // 实例化
+    // var proxyRequest = new ProxyRequest()
+    var validator = new Validator()
+    // 构造函数
+    function Validator() {
+        this.cache = []
+        this.warnDom = []
+    }
+    // 原型链
+    Validator.prototype.strategies = {
+        isNoEmpty: function (value, errorMsg) {
+            if( value == '') {
+                return errorMsg
+            }
+            return true
+        },
+        maxLength: function (value, length, erroMsg) {
+            if(value != "" && value.length > length ){
+                    return erroMsg
+            }
+            return true
+        },
+        minLength: function (value, length, erroMsg) {
+            if(value != "" && value.length < length ){
+                    return erroMsg
+            }
+            return true
+        }
+    }
+
+    Validator.prototype.add = function (dom, showDom, strategyArr) {
+        var self = this
+        this.warnDom.push(showDom)
+        strategyArr.forEach(function(ele, index) {
+            self.cache.push(function () {
+                // arr => ["maxlenght",4]
+                var arr = ele.strategy.split(":")
+                // arr 变成4
+                // type 变成maxlength
+                var type = arr.shift()
+                // [dom.value] => [dom.value, 4]
+                arr.unshift(dom.value)
+                //  [dom.value, 4, errorMsg]
+                arr.push(ele.errorMsg)
+
+                var msg = self.strategies[type].apply(self, arr)
+                if (msg != true) {
+                    showDom.innerText = msg
+                } 
+                return msg
+            })
+        });
+    }
+    Validator.prototype.start = function () {
+        // 标记是否符合规则
+        var flag = true
+        
+        this.warnDom.forEach(function (ele) {
+            ele.innerText =  ""
+        })
+            this.cache.forEach(function(ele) {
+            if (ele() !== true ){
+                flag = false 
+            }
+        });
+        return flag
+    }
+    // 函数    
+    function Request() {
+        console.log("sent msg!!")
+    }
+    var ProxyRequest = (function () {
+        // 1.校验内容dom 2.错误信息显示 3.校验规则
+        validator.add(user, showUser, [{
+            strategy: "isNoEmpty",
+            errorMsg: "账号不能为空"
+        },{
+            strategy: "maxLength:4",
+            errorMsg: "账号不能大于4位"
+        }])
+        validator.add(psw, showPsw, [{
+            strategy: "isNoEmpty",
+            errorMsg: "密码不能为空"
+        },{
+            strategy: "minLength:6",
+            errorMsg: "密码长度不但能小于6位"
+        }])
+        return function () {
+            if (validator.start() === true) {
+                Request()
+            } 
+        }
+    }())
+
+    // 文档 
+    /**
+     * add方法
+     * 添加校验规则
+     * dom,
+     * [
+     *  {strategy:"isNoEmpty", showDom, errorMsg: "账号不能为空"}，
+     *  {strategy:"maxLength：4", showDom, errorMsg: "账号长度不能超过4个"}
+     * ]
+     */
+    // start方法  校验，并返回校验结果
+    // extend方法 可以扩展 算法 ｛isMail: function(){}｝
+</script>
