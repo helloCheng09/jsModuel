@@ -11,6 +11,7 @@
 // start方法  校验，并返回校验结果
 // extend方法 可以扩展 算法 ｛isMail: function(){}｝
 
+
 // 提交表单
 document.getElementById("submit").addEventListener("click", function () {
     ProxyRequest()

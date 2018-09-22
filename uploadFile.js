@@ -1,10 +1,29 @@
-
 var oDiv = document.getElementById("show")
 var oBtnArr = document.getElementsByTagName("button")
-for (var i = 0; i < oBtnArr.length; i++) {
-    oBtnArr[i].onclick = function () {
-        // changeStyle(oDiv, this.getAttribute("type"))
+// 构造 代理模式 
+var ProxyRequest = function   () {
+    var cache = []
+    var timer = null
+    return function () {
+        cache.push(this.getAttribute("type"))
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            changeStyle(oDiv, cache)
+            cache = []  
+        }, 2000);
     }
+
+}
+// 实例 代理核心
+var realChange =  ProxyRequest(changeStyle)
+
+
+// 让点击事件进入代理
+for (var i = 0; i < oBtnArr.length; i++) {
+    // oBtnArr[i].onclick = function () {
+    //     changeStyle(oDiv, this.getAttribute("type"))
+    // }
+    oBtnArr[i].onclick = realChange
 }
 
 // 改变样式函数
@@ -16,6 +35,7 @@ function changeStyle(dom, typeArr) {
     // }
 
     // 打包一次发送
+    // 比喻后台处理上传文件
     var tyepObj = {
         bg: ["backgroundColor", "green"],
         cl: ["color", "blue"],
@@ -33,4 +53,4 @@ function changeStyle(dom, typeArr) {
     }
 }
 
-changeStyle(oDiv, ["bg", "cl", "fs"])
+// changeStyle(oDiv, ["bg", "cl", "fs"])

@@ -34,6 +34,7 @@ var ProxyImage = function (src) {
     // 占位图
     oMyIamge.setSrc("./1.jpg")
     oImg.src = src
+    
     oImg.onload = function () {
         document.getElementById("btn").addEventListener("click",function(){
             oMyIamge.setSrc(oImg.src)
