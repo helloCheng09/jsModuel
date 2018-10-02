@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var smallPlane = {
+        //     width: 100,
+        //     height: 100,
+        //     blood: 100,
+        //     toch: function () {
+        //         this.blood -= 50;
+        //         if (this.blood == 0) {
+        //             console.log('die')
+        //         }
+        //     }
+        // }
+
+        // 构造函数创建飞机
+        function smallPlane() {
+            this.width = 100
+            this.height = 100
+            this.name = 'smallPlane'
+            this.blood = 100
+            this.touch = function () {
+                this.blood -= 50
+                if (this.blood == 0) {
+                    console.log("die")
+                }
+            }
+        }
+
+        function bigPlane() {
+            this.width = 120
+            this.height = 120
+            this.name = 'bigPlane'
+            this.blood = 120
+            this.touch = function () {
+                this.blood -= 60
+                if (this.blood == 0) {
+                    console.log("die")
+                }
+            }
+        }
+
+        function attackPlane() {
+            this.height = 125
+            this.width = 125
+            this.blood =  100
+            this.name = 'attackPlne'
+            this.touch = function () {
+
+            }
+            this.attcl = function () {
+                console.log("bullet")
+            }
+        }
+
+
+        function planeFactory(type) {
+            var newPlane = null
+            switch (type) {
+                case 'smallPlne':
+                    newPlane = new smallPlane
+                    break;
+                case 'bigPlane':
+                    newPlane = new bigPlane
+                    break
+                case 'attackPlane':
+                    newPlane = new attackPlane
+            }
+            newPlane.did = function () {
+                console.log("booomb!")
+            }
+        }
+
+        // 构造
+        var plane1 = new smallPlane()
+        console.log(plane1)
+        planeFactory("smallPlane")
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
