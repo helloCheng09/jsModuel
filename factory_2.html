@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+         * 工厂方法模式
+         */
+        function PlaneFactory() {
+            this.decorate_list = []
+        }
+        // 集中所有装饰方法
+        PlaneFactory.prototype.decorators = {
+            eatOneLife: function (obj) {
+                obj.blood += 100
+            },
+            highterAttack: function () {
+
+            },
+            eatShrinkLife: function (obj) {
+                obj.blood -= 50
+            }
+            
+        }
+        // 搜集对某对象的修饰描述
+        PlaneFactory.prototype.decorate = function(decorator) {
+            // 
+            this.decorate_list.push(decorator)
+        }
+
+        // 让装饰方法作用在该对象的身上
+        PlaneFactory.prototype.update = function () {
+            for (var i = 0; i < this.decorate_list.length; i++){
+                this.decorators[ this.decorate_list[i] && this.decorators[this.decorate_list[i]](this)]
+            }
+        }
+
+        // 子类工厂都可以使用的方法
+        PlaneFactory.prototype.touch = function () {
+            this.blood -= 50
+            if (this.blood < 0) {
+                this.die()
+            }
+            return this.blood
+        }
+
+        PlaneFactory.prototype.die = function () {
+            console.log("die!!!!!")
+        }
+
+        // 创建对象的借口
+        PlaneFactory.create = function (type) {
+            // 判定是否存在这种类型
+            if (PlaneFactory.prototype[type] == undefined) {
+                throw 'no this constructor! null'
+            }
+            // 继承
+            // 判断是是否有继承关系
+            if (PlaneFactory.prototype[type].prototype.__proto__ !== PlaneFactory.prototype) {
+                PlaneFactory.prototype[type].prototype = new PlaneFactory()
+            }
+            console.log(arguments)
+            var arg = [].slice.call(arguments, 1)
+            console.log(arg)
+            // arg => [10, 20]
+            var newPlane = new PlaneFactory.prototype[type](...arg)
+            return newPlane
+        }
+
+        // 真正的子类工厂
+        PlaneFactory.prototype.SmallPlane = function (x, y) {
+            this.x = x
+            this.y = y
+            this.width = 100
+            this.height = 100
+            this.name = 'smallPlane'
+            this.blood = 100
+        }
+
+        PlaneFactory.prototype.BigPlane = function (x, y) {
+            this.x = x
+            this.y = y
+            this.width = 120
+            this.height = 120
+            this.name = 'bigPlane'
+            this.blood = 120
+        }
+
+        PlaneFactory.prototype.AttackPlane = function (x, y) {
+            this.x = x
+            this.y = y
+            this.height = 125
+            this.width = 125
+            this.blood = 100
+            this.name = 'attackPlne'
+            this.attack = function () {
+                console.log("biu)) biu ))")
+            }
+        }
+
+        var oAp = PlaneFactory.create("AttackPlane", 10, 20)
+        var oSp = PlaneFactory.create("SmallPlane", 20, 30)
+        var oBp = PlaneFactory.create("BigPlane", 30, 40)
+
+        // 装饰者模式
+        // 定义： 在不改变原对象基础上，在程序运行期间给对象动态添加职责
+        oAp.decorate("eatOneLife")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

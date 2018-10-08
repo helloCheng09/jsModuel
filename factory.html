@@ -52,7 +52,7 @@
         function attackPlane() {
             this.height = 125
             this.width = 125
-            this.blood =  100
+            this.blood = 100
             this.name = 'attackPlne'
             this.touch = function () {
 
@@ -62,11 +62,18 @@
             }
         }
 
-
+        // 实例化
+        // 工厂模式
+        /**
+        * 集中创建对象
+        * 单一职责
+        * 违反开闭原则
+        * 比阿奴扩展，新增
+        */
         function planeFactory(type) {
             var newPlane = null
             switch (type) {
-                case 'smallPlne':
+                case 'smallPlane':
                     newPlane = new smallPlane
                     break;
                 case 'bigPlane':
@@ -74,22 +81,18 @@
                     break
                 case 'attackPlane':
                     newPlane = new attackPlane
+                    break
             }
-            newPlane.did = function () {
+            newPlane.die = function () {
                 console.log("booomb!")
             }
+            return newPlane
         }
 
         // 构造
-        var plane1 = new smallPlane()
-        console.log(plane1)
+        // var plane1 = new smallPlane()
+        // console.log(plane1)
         planeFactory("smallPlane")
-
-
-
-
-
-
     </script>
 </body>
 
